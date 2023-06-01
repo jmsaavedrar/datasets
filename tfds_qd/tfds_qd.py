@@ -29,7 +29,7 @@ class TFDS_MNIST(tfds.core.GeneratorBasedBuilder):
     
     def _split_generators(self, dl_manager: tfds.download.DownloadManager):
         """Returns SplitGenerators."""    
-        self.path = '/mnt/hd-data/Datasets/mnist'    
+        self.path = '/home/DIINF/vchang/jsaavedr/datasets/quickdraw'    
         return {
             'train': self._generate_examples(os.path.join(self.path,'train.txt')),
             'test' : self._generate_examples(os.path.join(self.path,'test.txt'))
