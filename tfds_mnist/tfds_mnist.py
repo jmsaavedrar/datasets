@@ -52,8 +52,3 @@ class TFDS_MNIST(tfds.core.GeneratorBasedBuilder):
                     'label': label,
                 }
           
-if __name__ == '__main__':
-    ds = tfds.load('tfds_mnist')
-    for sample in ds['train'] :
-        plt.imshow(sample['image'])
-        plt.waitforbuttonpress(1)
