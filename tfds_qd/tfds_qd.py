@@ -6,7 +6,7 @@ import skimage.io as io
 import numpy as np
 import matplotlib.pyplot as plt
 
-class TFDS_MNIST(tfds.core.GeneratorBasedBuilder):
+class TFDS_QD(tfds.core.GeneratorBasedBuilder):
     """DatasetBuilder for tdfs_mnist dataset."""
     
     VERSION = tfds.core.Version('1.0.0')
@@ -16,10 +16,15 @@ class TFDS_MNIST(tfds.core.GeneratorBasedBuilder):
       
     def _info(self) -> tfds.core.DatasetInfo:
         """Returns the dataset metadata."""    
+        cats = []
+        with open('categories.txt') as f:
+            for category in f:
+                cats.append(category.strip())
+                
         return self.dataset_info_from_configs(
             features=tfds.features.FeaturesDict({            
                 'image': tfds.features.Image(shape=(None, None, 1)),
-                'label': tfds.features.ClassLabel(names=['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']),
+                'label': tfds.features.ClassLabel(names=cats),
             }),
             # If there's a common (input, target) tuple from the
             # features, specify them here. They'll be used if
