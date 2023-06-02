@@ -4,7 +4,6 @@ import tensorflow_datasets as tfds
 import os
 import skimage.io as io
 import numpy as np
-import matplotlib.pyplot as plt
 
 class TFDS_QD(tfds.core.GeneratorBasedBuilder):
     """DatasetBuilder for tdfs_mnist dataset."""
