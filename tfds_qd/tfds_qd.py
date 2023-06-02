@@ -16,15 +16,15 @@ class TFDS_QD(tfds.core.GeneratorBasedBuilder):
       
     def _info(self) -> tfds.core.DatasetInfo:
         """Returns the dataset metadata."""    
-        cats = []
-        with open('categories.txt') as f:
-            for category in f:
-                cats.append(category.strip())
+#        cats = range(345)
+#         with open('categories.txt') as f:
+#             for category in f:
+#                 cats.append(category.strip())
                 
         return self.dataset_info_from_configs(
             features=tfds.features.FeaturesDict({            
                 'image': tfds.features.Image(shape=(None, None, 1)),
-                'label': tfds.features.ClassLabel(names=cats),
+                'label': tfds.features.ClassLabel(names=range(345)),
             }),
             # If there's a common (input, target) tuple from the
             # features, specify them here. They'll be used if
