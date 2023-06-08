@@ -15,10 +15,10 @@
 
 import os
 
-import datasets
+#import datasets
 from datasets.tasks import ImageClassification
-
 from .classes import IMAGENET2012_CLASSES
+import tensorflow_datasets as tfds
 
 
 _CITATION = """\
@@ -47,53 +47,70 @@ _DATA = {
 }
 
 
-class Imagenet1k(datasets.GeneratorBasedBuilder):
-    VERSION = datasets.Version("1.0.0")
+class Imagenet1k(tfds.core.GeneratorBasedBuilder):
+    VERSION = tfds.core.Version("1.0.0")
 
     DEFAULT_WRITER_BATCH_SIZE = 1000
 
     def _info(self):
         assert len(IMAGENET2012_CLASSES) == 1000
-        return datasets.DatasetInfo(
-            description=_DESCRIPTION,
-            features=datasets.Features(
-                {
-                    "image": datasets.Image(),
-                    "label": datasets.ClassLabel(names=list(IMAGENET2012_CLASSES.values())),
-                }
-            ),
-            homepage=_HOMEPAGE,
-            citation=_CITATION,
-            task_templates=[ImageClassification(image_column="image", label_column="label")],
-        )
+        return self.dataset_info_from_configs(
+                                              features=tfds.features.FeaturesDict({
+                                                                                   'image': tfds.features.Image(shape=(None, None, 3)),
+                                                                                   'label': tfds.features.ClassLabel(names=range(1000))
+                                                                                   }), 
+                                              supervised_keys=('image', 'label'))
+        
 
-    def _split_generators(self, dl_manager):
+#         return datasets.DatasetInfo(
+#             description=_DESCRIPTION,
+#             features=datasets.Features(
+#                 {
+#                     "image": datasets.Image(),
+#                     "label": datasets.ClassLabel(names=list(IMAGENET2012_CLASSES.values())),
+#                 }
+#             ),
+#             homepage=_HOMEPAGE,
+#             citation=_CITATION,
+#             task_templates=[ImageClassification(image_column="image", label_column="label")],
+#         )
+
+    def _split_generators(self, dl_manager: tfds.download.DownloadManager):
         """Returns SplitGenerators."""
         archives = _DATA
+        return {
+            'train': self._generate_examples(archives = [dl_manager.iter_archive(os.path.join(_DATA_DIR, archive)) for archive in archives["train"]],
+                                             split = 'train'),
+            'test' : self._generate_examples(archives = [dl_manager.iter_archive(os.path.join(_DATA_DIR, archive)) for archive in archives["test"]],
+                                             split = 'val'),
+            'val' : self._generate_examples(archives = [dl_manager.iter_archive(os.path.join(_DATA_DIR, archive)) for archive in archives["val"]],
+                                             split = 'val'),
+            }
 
-        return [
-            datasets.SplitGenerator(
-                name=datasets.Split.TRAIN,
-                gen_kwargs={
-                    "archives": [dl_manager.iter_archive(os.path.join(DATA_DIR, archive)) for archive in archives["train"]],
-                    "split": "train",
-                },
-            ),
-            datasets.SplitGenerator(
-                name=datasets.Split.VALIDATION,
-                gen_kwargs={
-                    "archives": [dl_manager.iter_archive(os.path.join(DATA_DIR, archive)) for archive in archives["val"]],
-                    "split": "validation",
-                },
-            ),
-            datasets.SplitGenerator(
-                name=datasets.Split.TEST,
-                gen_kwargs={
-                    "archives": [dl_manager.iter_archive(os.path.join(DATA_DIR, archive)) for archive in archives["test"]],
-                    "split": "test",
-                },
-            ),
-        ]
+
+#         return [
+#             datasets.SplitGenerator(
+#                 name=datasets.Split.TRAIN,
+#                 gen_kwargs={
+#                     "archives": [dl_manager.iter_archive(os.path.join(DATA_DIR, archive)) for archive in archives["train"]],
+#                     "split": "train",
+#                 },
+#             ),
+#             datasets.SplitGenerator(
+#                 name=datasets.Split.VALIDATION,
+#                 gen_kwargs={
+#                     "archives": [dl_manager.iter_archive(os.path.join(DATA_DIR, archive)) for archive in archives["val"]],
+#                     "split": "validation",
+#                 },
+#             ),
+#             datasets.SplitGenerator(
+#                 name=datasets.Split.TEST,
+#                 gen_kwargs={
+#                     "archives": [dl_manager.iter_archive(os.path.join(DATA_DIR, archive)) for archive in archives["test"]],
+#                     "split": "test",
+#                 },
+#             ),
+#         ]
 
     def _generate_examples(self, archives, split):
         """Yields examples."""
