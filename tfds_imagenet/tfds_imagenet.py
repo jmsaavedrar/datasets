@@ -14,9 +14,8 @@
 # limitations under the License.
 
 import os
-
 #import datasets
-from datasets.tasks import ImageClassification
+#from datasets.tasks import ImageClassification
 from .classes import IMAGENET2012_CLASSES
 import tensorflow_datasets as tfds
 
