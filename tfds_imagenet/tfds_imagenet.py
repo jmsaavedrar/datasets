@@ -17,7 +17,7 @@ import os
 #import datasets
 from .classes import IMAGENET2012_CLASSES
 import tensorflow_datasets as tfds
-
+import glob
 
 _CITATION = """\
 @article{imagenet15russakovsky,
@@ -33,15 +33,15 @@ _CITATION = """\
 """
 
 _HOMEPAGE = "https://image-net.org/index.php"
-_DATA_DIR = "/data/imagenet"
+_DATA_DIR = "/data/extracted/imagenet"
 _DESCRIPTION = """\
 ILSVRC 2012, commonly known as 'ImageNet' is an image dataset organized according to the WordNet hierarchy. Each meaningful concept in WordNet, possibly described by multiple words or word phrases, is called a "synonym set" or "synset". There are more than 100,000 synsets in WordNet, majority of them are nouns (80,000+). ImageNet aims to provide on average 1000 images to illustrate each synset. Images of each concept are quality-controlled and human-annotated. In its completion, ImageNet hopes to offer tens of millions of cleanly sorted images for most of the concepts in the WordNet hierarchy. ImageNet 2012 is the most commonly used subset of ImageNet. This dataset spans 1000 object classes and contains 1,281,167 training images, 50,000 validation images and 100,000 test images
 """
 
 _DATA = {
-    'train': ['{}/train_images/train_images_{}.tar.gz'.format(_DATA_DIR,i) for i in range(5)],
-    'val': ['{}/val_images/val_images.tar.gz'.format(_DATA_DIR)],
-    'test': ['{}/test_images/test_images.tar.gz'.format(_DATA_DIR)]    
+    'train': glob.glob(os.path.join(_DATA_DIR, 'train_images/*.JPEG')),
+    'test': glob.glob(os.path.join(_DATA_DIR, 'test_images/*.JPEG')),
+    'val': glob.glob(os.path.join(_DATA_DIR, 'val_images/*.JPEG')),    
 }
 
 
@@ -75,13 +75,13 @@ class Imagenet1k(tfds.core.GeneratorBasedBuilder):
 
     def _split_generators(self, dl_manager: tfds.download.DownloadManager):
         """Returns SplitGenerators."""        
-        archives = dl_manager.extract(_DATA)
+        
         return {
-            'train': self._generate_examples(archives = [dl_manager.iter_archive(archive) for archive in archives["train"]],
+            'train': self._generate_examples(archives = [dl_manager.iter_archive(archive) for archive in _DATA["train"]],
                                              split = 'train'),
-            'test' : self._generate_examples(archives = [dl_manager.iter_archive(archive) for archive in archives["test"]],
+            'test' : self._generate_examples(archives = [dl_manager.iter_archive(archive) for archive in _DATA["test"]],
                                              split = 'val'),
-            'val' : self._generate_examples(archives = [dl_manager.iter_archive(archive) for archive in archives["val"]],
+            'val' : self._generate_examples(archives = [dl_manager.iter_archive(archive) for archive in _DATA["val"]],
                                              split = 'val'),
             }
 
