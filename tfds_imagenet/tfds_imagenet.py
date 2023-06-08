@@ -39,9 +39,9 @@ ILSVRC 2012, commonly known as 'ImageNet' is an image dataset organized accordin
 """
 
 _DATA = {
-    'train': ['train_images/train_images_{}.tar.gz'.format(i) for i in range(5)],
-    'val': ['val_images/val_images.tar.gz'],
-    'test': ['test_images/test_images.tar.gz']    
+    'train': ['{}/train_images/train_images_{}.tar.gz'.format(_DATA_DIR,i) for i in range(5)],
+    'val': ['{}/val_images/val_images.tar.gz'.format(_DATA_DIR)],
+    'test': ['{}/test_images/test_images.tar.gz'.format(_DATA_DIR)]    
 }
 
 
@@ -77,11 +77,11 @@ class Imagenet1k(tfds.core.GeneratorBasedBuilder):
         """Returns SplitGenerators."""        
         archives = dl_manager.extract(_DATA)
         return {
-            'train': self._generate_examples(archives = [dl_manager.iter_archive(os.path.join(_DATA_DIR, archive)) for archive in archives["train"]],
+            'train': self._generate_examples(archives = [dl_manager.iter_archive(archive) for archive in archives["train"]],
                                              split = 'train'),
-            'test' : self._generate_examples(archives = [dl_manager.iter_archive(os.path.join(_DATA_DIR, archive)) for archive in archives["test"]],
+            'test' : self._generate_examples(archives = [dl_manager.iter_archive(archive) for archive in archives["test"]],
                                              split = 'val'),
-            'val' : self._generate_examples(archives = [dl_manager.iter_archive(os.path.join(_DATA_DIR, archive)) for archive in archives["val"]],
+            'val' : self._generate_examples(archives = [dl_manager.iter_archive(archive) for archive in archives["val"]],
                                              split = 'val'),
             }
 
