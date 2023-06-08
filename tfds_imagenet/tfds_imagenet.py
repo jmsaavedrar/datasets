@@ -15,7 +15,6 @@
 
 import os
 #import datasets
-#from datasets.tasks import ImageClassification
 from .classes import IMAGENET2012_CLASSES
 import tensorflow_datasets as tfds
 
@@ -40,7 +39,7 @@ ILSVRC 2012, commonly known as 'ImageNet' is an image dataset organized accordin
 """
 
 _DATA = {
-    'train': ['train_images/train_images_{i}.tar.gz'  for i in range(5)],
+    'train': ['train_images/train_images_{}.tar.gz'.format(i) for i in range(5)],
     'val': ['val_images/val_images.tar.gz'],
     'test': ['test_images/test_images.tar.gz']    
 }
