@@ -75,7 +75,7 @@ class Imagenet1k(tfds.core.GeneratorBasedBuilder):
 
     def _split_generators(self, dl_manager: tfds.download.DownloadManager):
         """Returns SplitGenerators."""        
-        archives = tfds.extract(_DATA)
+        archives = dl_manager.extract(_DATA)
         return {
             'train': self._generate_examples(archives = [dl_manager.iter_archive(os.path.join(_DATA_DIR, archive)) for archive in archives["train"]],
                                              split = 'train'),
