@@ -74,8 +74,8 @@ class Imagenet1k(tfds.core.GeneratorBasedBuilder):
 #         )
 
     def _split_generators(self, dl_manager: tfds.download.DownloadManager):
-        """Returns SplitGenerators."""
-        archives = _DATA
+        """Returns SplitGenerators."""        
+        archives = tfds.extract(_DATA)
         return {
             'train': self._generate_examples(archives = [dl_manager.iter_archive(os.path.join(_DATA_DIR, archive)) for archive in archives["train"]],
                                              split = 'train'),
@@ -115,6 +115,7 @@ class Imagenet1k(tfds.core.GeneratorBasedBuilder):
         idx = 0
         for archive in archives:
             for path, file in archive:
+                print(path)
                 if path.endswith(".JPEG"):
                     if split != "test":
                         # image filepath format: <IMAGE_FILENAME>_<SYNSET_ID>.JPEG
