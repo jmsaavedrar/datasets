@@ -115,8 +115,7 @@ class Imagenet1k(tfds.core.GeneratorBasedBuilder):
             print(image_path)
             #if image_path.endswith(".JPEG"):
             if split != "test":
-                # image filepath format: <IMAGE_FILENAME>_<SYNSET_ID>.JPEG
-                #root, _ = os.path.splitext(image_path)
+                # image filepath format: <IMAGE_FILENAME>_<SYNSET_ID>.JPEG                
                 root, _ = os.path.splitext(image_path)                    
                 _, synset_id = os.path.basename(root).rsplit("_", 1)
                 label = list(IMAGENET2012_CLASSES.keys()).index(synset_id)
