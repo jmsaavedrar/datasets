@@ -79,7 +79,7 @@ class Imagenet1k(tfds.core.GeneratorBasedBuilder):
         
         return {
             'train': self._generate_examples(image_files = _DATA["train"], split = 'train'),
-            'test' : self._generate_examples(image_files = _DATA["test"], split = 'val'),
+            'test' : self._generate_examples(image_files = _DATA["test"], split = 'test'),
             'val' : self._generate_examples(image_files = _DATA["val"], split = 'val'),
             }
 
