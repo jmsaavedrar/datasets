@@ -112,6 +112,7 @@ class Imagenet1k(tfds.core.GeneratorBasedBuilder):
         """Yields examples."""
         idx = 0
         for image_path in image_files:
+            print(image_path)
             #if image_path.endswith(".JPEG"):
             if split != "test":
                 # image filepath format: <IMAGE_FILENAME>_<SYNSET_ID>.JPEG
