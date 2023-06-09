@@ -112,21 +112,21 @@ class Imagenet1k(tfds.core.GeneratorBasedBuilder):
         """Yields examples."""
         idx = 0
         for image_path in image_files:
-            if image_path.endswith(".JPEG"):
-                if split != "test":
-                    # image filepath format: <IMAGE_FILENAME>_<SYNSET_ID>.JPEG
-                    #root, _ = os.path.splitext(image_path)
-                    root, _ = os.path.splitext(image_path)                    
-                    _, synset_id = os.path.basename(root).rsplit("_", 1)
-                    label = list(IMAGENET2012_CLASSES.keys()).index(synset_id)
-                else:
-                    label = -1
-                ex = {
-                      "image": io.imread(image_path),
-                      "label": label
-                      }
-                yield idx, ex
-                idx += 1
+            #if image_path.endswith(".JPEG"):
+            if split != "test":
+                # image filepath format: <IMAGE_FILENAME>_<SYNSET_ID>.JPEG
+                #root, _ = os.path.splitext(image_path)
+                root, _ = os.path.splitext(image_path)                    
+                _, synset_id = os.path.basename(root).rsplit("_", 1)
+                label = list(IMAGENET2012_CLASSES.keys()).index(synset_id)
+            else:
+                label = -1
+            ex = {
+                  "image": io.imread(image_path),
+                  "label": label
+                  }
+            yield idx, ex
+            idx += 1
 
 # 
 # 
