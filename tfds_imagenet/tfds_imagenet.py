@@ -111,6 +111,15 @@ class Imagenet1k(tfds.core.GeneratorBasedBuilder):
 #             ),
 #         ]
     
+
+    def image_to_bytes(self, image: "PIL.Image.Image") -> bytes:
+        """Convert a PIL Image object to bytes using native compression if possible, otherwise use PNG compression."""
+        buffer = BytesIO()
+        format = image.format 
+        image.save(buffer, format=format)
+        return buffer.getvalue()
+
+
     def check_image(self, image):
         if len(image.shape) == 2 :
             image = color.gray2rgb(image)
@@ -134,7 +143,7 @@ class Imagenet1k(tfds.core.GeneratorBasedBuilder):
                     label = -1
                 ex = {
                       #'image': self.check_image(io.imread(image_path)),
-                      'image': Image.open(image_path),
+                      'image': self.image_to_bytes(Image.open(image_path)),
                       'label': label
                       }
                 yield idx, ex
