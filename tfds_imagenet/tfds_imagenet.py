@@ -111,7 +111,7 @@ class Imagenet1k(tfds.core.GeneratorBasedBuilder):
     def check_image(self, image):
         if len(image.shape) == 2 :
             image = color.gray2rgb(image)
-        if image.dtype() == np.float32 :
+        if image.dtype == np.float32 :
             image = (image * 255).asptype(np.uint8)
         assert image.dtype == np.uint8, 'incorrect dtype'
         return image
