@@ -34,7 +34,7 @@ _CITATION = """\
 """
 
 _HOMEPAGE = "https://image-net.org/index.php"
-_DATA_DIR = "/data/extracted/imagenet"
+_DATA_DIR = "/data/extracted_imagenet"
 _DESCRIPTION = """\
 ILSVRC 2012, commonly known as 'ImageNet' is an image dataset organized according to the WordNet hierarchy. Each meaningful concept in WordNet, possibly described by multiple words or word phrases, is called a "synonym set" or "synset". There are more than 100,000 synsets in WordNet, majority of them are nouns (80,000+). ImageNet aims to provide on average 1000 images to illustrate each synset. Images of each concept are quality-controlled and human-annotated. In its completion, ImageNet hopes to offer tens of millions of cleanly sorted images for most of the concepts in the WordNet hierarchy. ImageNet 2012 is the most commonly used subset of ImageNet. This dataset spans 1000 object classes and contains 1,281,167 training images, 50,000 validation images and 100,000 test images
 """
