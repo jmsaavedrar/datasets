@@ -20,6 +20,7 @@ import tensorflow_datasets as tfds
 import glob
 from io import BytesIO
 from PIL import Image
+import numpy as np
 
 import resource
 low, high = resource.getrlimit(resource.RLIMIT_NOFILE)
@@ -62,8 +63,8 @@ class Imagenet1k(tfds.core.GeneratorBasedBuilder):
                                               features=tfds.features.FeaturesDict({
                                                                                    'image': tfds.features.Image(shape=(None, None, 3)),
                                                                                    'label': tfds.features.ClassLabel(names=range(1000)),
-                                                                                   'height' : tfds.features.Scalar(dtype = 'int'),
-                                                                                   'width' : tfds.features.Scalar(dtype = 'int')
+                                                                                   'height' : tfds.features.Scalar(dtype = np.int32),
+                                                                                   'width' : tfds.features.Scalar(dtype = np.int32)
                                                                                    }), 
                                               supervised_keys=('image', 'label'))
         
