@@ -108,10 +108,10 @@ class Imagenet1k(tfds.core.GeneratorBasedBuilder):
 #             ),
 #         ]
 
-    def _generate_examples(self, images, split):
+    def _generate_examples(self, image_files, split):
         """Yields examples."""
         idx = 0
-        for image_path in images:
+        for image_path in image_files:
             if image_path.endswith(".JPEG"):
                 if split != "test":
                     # image filepath format: <IMAGE_FILENAME>_<SYNSET_ID>.JPEG
