@@ -18,9 +18,8 @@ import os
 from .classes import IMAGENET2012_CLASSES
 import tensorflow_datasets as tfds
 import glob
-import skimage.io as io
-import skimage.color as color
-import numpy as np
+
+from PIL import Image
 
 _CITATION = """\
 @article{imagenet15russakovsky,
@@ -130,7 +129,8 @@ class Imagenet1k(tfds.core.GeneratorBasedBuilder):
                 else:
                     label = -1
                 ex = {
-                      'image': self.check_image(io.imread(image_path)),
+                      #'image': self.check_image(io.imread(image_path)),
+                      'image': Image.open(image_path).convert('RGB'),
                       'label': label
                       }
                 yield idx, ex
