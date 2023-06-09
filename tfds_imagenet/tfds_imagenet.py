@@ -131,7 +131,7 @@ class Imagenet1k(tfds.core.GeneratorBasedBuilder):
             else:
                 label = -1
             ex = {
-                  'image': self.check(io.imread(image_path)),
+                  'image': self.check_image(io.imread(image_path)),
                   'label': label
                   }
             yield idx, ex
