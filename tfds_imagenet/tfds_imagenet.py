@@ -19,6 +19,8 @@ from .classes import IMAGENET2012_CLASSES
 import tensorflow_datasets as tfds
 import glob
 import skimage.io as io
+import skimage.color as color
+import numpy as np
 
 _CITATION = """\
 @article{imagenet15russakovsky,
@@ -105,12 +107,21 @@ class Imagenet1k(tfds.core.GeneratorBasedBuilder):
 #                 },
 #             ),
 #         ]
-
+    
+    def check_image(self, image):
+        if len(image.shape) == 2 :
+            image = color.gray2rgb(image)
+        if image.dtype() == np.float32 :
+            image = (image * 255).asptype(np.uint8)
+        assert image.dtype == np.uint8, 'incorrect dtype'
+        return image
+         
+        
     def _generate_examples(self, image_files, split):
         """Yields examples."""
         idx = 0
         for image_path in image_files:
-            print(image_path)
+            print(image_path, )
             #if image_path.endswith(".JPEG"):
             if split != 'test':
                 # image filepath format: <IMAGE_FILENAME>_<SYNSET_ID>.JPEG                
@@ -120,7 +131,7 @@ class Imagenet1k(tfds.core.GeneratorBasedBuilder):
             else:
                 label = -1
             ex = {
-                  'image': io.imread(image_path),
+                  'image': self.check(io.imread(image_path)),
                   'label': label
                   }
             yield idx, ex
