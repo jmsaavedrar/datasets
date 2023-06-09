@@ -18,7 +18,7 @@ import os
 from .classes import IMAGENET2012_CLASSES
 import tensorflow_datasets as tfds
 import glob
-
+from io import BytesIO
 from PIL import Image
 
 import resource
