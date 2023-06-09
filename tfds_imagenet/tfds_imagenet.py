@@ -21,6 +21,10 @@ import glob
 
 from PIL import Image
 
+import resource
+low, high = resource.getrlimit(resource.RLIMIT_NOFILE)
+resource.setrlimit(resource.RLIMIT_NOFILE, (high, high))
+
 _CITATION = """\
 @article{imagenet15russakovsky,
     Author = {Olga Russakovsky and Jia Deng and Hao Su and Jonathan Krause and Sanjeev Satheesh and Sean Ma and Zhiheng Huang and Andrej Karpathy and Aditya Khosla and Michael Bernstein and Alexander C. Berg and Li Fei-Fei},
