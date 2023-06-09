@@ -141,10 +141,13 @@ class Imagenet1k(tfds.core.GeneratorBasedBuilder):
                     label = list(IMAGENET2012_CLASSES.keys()).index(synset_id)
                 else:
                     label = -1
+                image = Image.open(image_path)
                 ex = {
                       #'image': self.check_image(io.imread(image_path)),
-                      'image': self.image_to_bytes(Image.open(image_path)),
-                      'label': label
+                      'image': self.image_to_bytes(image),
+                      'label': label,                      
+                      'height' :image.size[0],
+                      'width' : image.size[1],
                       }
                 yield idx, ex
                 idx += 1
