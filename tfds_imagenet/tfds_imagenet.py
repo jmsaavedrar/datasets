@@ -18,6 +18,7 @@ import os
 from .classes import IMAGENET2012_CLASSES
 import tensorflow_datasets as tfds
 import glob
+import skimage.io as io
 
 _CITATION = """\
 @article{imagenet15russakovsky,
@@ -77,12 +78,9 @@ class Imagenet1k(tfds.core.GeneratorBasedBuilder):
         """Returns SplitGenerators."""        
         
         return {
-            'train': self._generate_examples(archives = [dl_manager.iter_archive(archive) for archive in _DATA["train"]],
-                                             split = 'train'),
-            'test' : self._generate_examples(archives = [dl_manager.iter_archive(archive) for archive in _DATA["test"]],
-                                             split = 'val'),
-            'val' : self._generate_examples(archives = [dl_manager.iter_archive(archive) for archive in _DATA["val"]],
-                                             split = 'val'),
+            'train': self._generate_examples(image_files = _DATA["train"], split = 'train'),
+            'test' : self._generate_examples(image_files = _DATA["test"], split = 'val'),
+            'val' : self._generate_examples(image_files = _DATA["val"], split = 'val'),
             }
 
 
@@ -110,20 +108,42 @@ class Imagenet1k(tfds.core.GeneratorBasedBuilder):
 #             ),
 #         ]
 
-    def _generate_examples(self, archives, split):
+    def _generate_examples(self, images, split):
         """Yields examples."""
         idx = 0
-        for archive in archives:
-            for path, file in archive:
-                print(path)
-                if path.endswith(".JPEG"):
-                    if split != "test":
-                        # image filepath format: <IMAGE_FILENAME>_<SYNSET_ID>.JPEG
-                        root, _ = os.path.splitext(path)
-                        _, synset_id = os.path.basename(root).rsplit("_", 1)
-                        label = IMAGENET2012_CLASSES[synset_id]
-                    else:
-                        label = -1
-                    ex = {"image": {"path": path, "bytes": file.read()}, "label": label}
-                    yield idx, ex
-                    idx += 1
+        for image_path in images:
+            if image_path.endswith(".JPEG"):
+                if split != "test":
+                    # image filepath format: <IMAGE_FILENAME>_<SYNSET_ID>.JPEG
+                    #root, _ = os.path.splitext(image_path)
+                    root, _ = os.path.splitext(image_path)                    
+                    _, synset_id = os.path.basename(root).rsplit("_", 1)
+                    label = list(IMAGENET2012_CLASSES.keys()).index(synset_id)
+                else:
+                    label = -1
+                ex = {
+                      "image": io.imread(image_path),
+                      "label": label
+                      }
+                yield idx, ex
+                idx += 1
+
+# 
+# 
+# def _generate_examples(self, fname):
+#         """Yields examples."""
+#         # TODO(tdfs_mnist): Yields (key, example) tuples from the dataset
+#         with open(fname) as flist :
+#             for i , f in enumerate(flist):
+#                 print(i, f)            
+#                 data = f.strip().split('\t')
+#                 name = data[0].strip()
+#                 fimage = os.path.join(self.path, name)
+#                 label = int(data[1].strip())
+#                 image = io.imread(fimage)
+#                 image = np.expand_dims(image, -1)
+#                 yield name, {
+#                     'image': image,
+#                     'label': label,
+#                 }
+#           
