@@ -62,8 +62,8 @@ class Imagenet1k(tfds.core.GeneratorBasedBuilder):
                                               features=tfds.features.FeaturesDict({
                                                                                    'image': tfds.features.Image(shape=(None, None, 3)),
                                                                                    'label': tfds.features.ClassLabel(names=range(1000)),
-                                                                                   'height' : tfds.features.Scalar(),
-                                                                                   'width' : tfds.features.Scalar()
+                                                                                   'height' : tfds.features.Scalar(dype = 'int32'),
+                                                                                   'width' : tfds.features.Scalar(dype = 'int32')
                                                                                    }), 
                                               supervised_keys=('image', 'label'))
         
