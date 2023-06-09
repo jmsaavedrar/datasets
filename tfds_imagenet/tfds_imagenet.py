@@ -75,14 +75,12 @@ class Imagenet1k(tfds.core.GeneratorBasedBuilder):
 #         )
 
     def _split_generators(self, dl_manager: tfds.download.DownloadManager):
-        """Returns SplitGenerators."""        
-        
+        """Returns SplitGenerators."""                
         return {
             'train': self._generate_examples(image_files = _DATA["train"], split = 'train'),
             'test' : self._generate_examples(image_files = _DATA["test"], split = 'test'),
             'val' : self._generate_examples(image_files = _DATA["val"], split = 'val'),
             }
-
 
 #         return [
 #             datasets.SplitGenerator(
@@ -114,7 +112,7 @@ class Imagenet1k(tfds.core.GeneratorBasedBuilder):
         for image_path in image_files:
             print(image_path)
             #if image_path.endswith(".JPEG"):
-            if split != "test":
+            if split != 'test':
                 # image filepath format: <IMAGE_FILENAME>_<SYNSET_ID>.JPEG                
                 root, _ = os.path.splitext(image_path)                    
                 _, synset_id = os.path.basename(root).rsplit("_", 1)
@@ -122,8 +120,8 @@ class Imagenet1k(tfds.core.GeneratorBasedBuilder):
             else:
                 label = -1
             ex = {
-                  "image": io.imread(image_path),
-                  "label": label
+                  'image': io.imread(image_path),
+                  'label': label
                   }
             yield idx, ex
             idx += 1
