@@ -19,8 +19,11 @@ from .classes import IMAGENET2012_CLASSES
 import tensorflow_datasets as tfds
 import glob
 from io import BytesIO
-from PIL import Image
+from PIL import Image, ImageFile
 import numpy as np
+
+ImageFile.LOAD_TRUNCATED_IMAGES = True
+
 
 import resource
 low, high = resource.getrlimit(resource.RLIMIT_NOFILE)
@@ -51,6 +54,7 @@ _DATA = {
     'val': glob.glob(os.path.join(_DATA_DIR, 'val_images/*.JPEG')),    
 }
 
+LABEL_KEYS = list(IMAGENET2012_CLASSES.keys())
 
 class Imagenet1k(tfds.core.GeneratorBasedBuilder):
     VERSION = tfds.core.Version("1.0.0")
@@ -62,9 +66,9 @@ class Imagenet1k(tfds.core.GeneratorBasedBuilder):
         return self.dataset_info_from_configs(
                                               features=tfds.features.FeaturesDict({
                                                                                    'image': tfds.features.Image(shape=(None, None, 3)),
-                                                                                   'label': tfds.features.ClassLabel(names=range(1000)),
-                                                                                   'height' : tfds.features.Scalar(dtype = np.int32),
-                                                                                   'width' : tfds.features.Scalar(dtype = np.int32)
+                                                                                   'label': tfds.features.ClassLabel(names=LABEL_KEYS),
+                                                                                   #'height' : tfds.features.Scalar(dtype = np.int32),
+                                                                                   #'width' : tfds.features.Scalar(dtype = np.int32)
                                                                                    }), 
                                               supervised_keys=('image', 'label'))
         
@@ -89,48 +93,15 @@ class Imagenet1k(tfds.core.GeneratorBasedBuilder):
             'test' : self._generate_examples(image_files = _DATA["test"], split = 'test'),
             'val' : self._generate_examples(image_files = _DATA["val"], split = 'val'),
             }
-
-#         return [
-#             datasets.SplitGenerator(
-#                 name=datasets.Split.TRAIN,
-#                 gen_kwargs={
-#                     "archives": [dl_manager.iter_archive(os.path.join(DATA_DIR, archive)) for archive in archives["train"]],
-#                     "split": "train",
-#                 },
-#             ),
-#             datasets.SplitGenerator(
-#                 name=datasets.Split.VALIDATION,
-#                 gen_kwargs={
-#                     "archives": [dl_manager.iter_archive(os.path.join(DATA_DIR, archive)) for archive in archives["val"]],
-#                     "split": "validation",
-#                 },
-#             ),
-#             datasets.SplitGenerator(
-#                 name=datasets.Split.TEST,
-#                 gen_kwargs={
-#                     "archives": [dl_manager.iter_archive(os.path.join(DATA_DIR, archive)) for archive in archives["test"]],
-#                     "split": "test",
-#                 },
-#             ),
-#         ]
-    
+  
 
     def image_to_bytes(self, image: "PIL.Image.Image") -> bytes:
         """Convert a PIL Image object to bytes using native compression if possible, otherwise use PNG compression."""
         buffer = BytesIO()
         format = image.format 
-        image.save(buffer, format=format)
+        image.save(buffer, format = format)
         return buffer.getvalue()
-
-
-    def check_image(self, image):
-        if len(image.shape) == 2 :
-            image = color.gray2rgb(image)
-        if image.dtype == np.float32 :
-            image = (image * 255).asptype(np.uint8)
-        assert image.dtype == np.uint8, 'incorrect dtype'
-        return image
-         
+        
         
     def _generate_examples(self, image_files, split):
         """Yields examples."""
@@ -141,36 +112,17 @@ class Imagenet1k(tfds.core.GeneratorBasedBuilder):
                     # image filepath format: <IMAGE_FILENAME>_<SYNSET_ID>.JPEG                
                     root, _ = os.path.splitext(image_path)                    
                     _, synset_id = os.path.basename(root).rsplit("_", 1)
-                    label = list(IMAGENET2012_CLASSES.keys()).index(synset_id)
+                    label = LABEL_KEYS.index(synset_id)
                 else:
                     label = -1
                 image = Image.open(image_path)
-                ex = {
-                      #'image': self.check_image(io.imread(image_path)),
+                ex = {                      
                       'image': self.image_to_bytes(image),
                       'label': label,                      
-                      'height' :image.size[0],
-                      'width' : image.size[1],
+                      #'height' :image.size[0],
+                      #'width' : image.size[1],
                       }
                 yield idx, ex
                 idx += 1
 
-# 
-# 
-# def _generate_examples(self, fname):
-#         """Yields examples."""
-#         # TODO(tdfs_mnist): Yields (key, example) tuples from the dataset
-#         with open(fname) as flist :
-#             for i , f in enumerate(flist):
-#                 print(i, f)            
-#                 data = f.strip().split('\t')
-#                 name = data[0].strip()
-#                 fimage = os.path.join(self.path, name)
-#                 label = int(data[1].strip())
-#                 image = io.imread(fimage)
-#                 image = np.expand_dims(image, -1)
-#                 yield name, {
-#                     'image': image,
-#                     'label': label,
-#                 }
-#           
+   
