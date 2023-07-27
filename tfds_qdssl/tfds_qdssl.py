@@ -49,7 +49,7 @@ class TFDS_QDSSL(tfds.core.GeneratorBasedBuilder):
         # TODO(tdfs_mnist): Yields (key, example) tuples from the dataset
         with open(fname) as flist :
             for i , f in enumerate(flist):       
-                if (i + 1)  % 100 == 0 :
+                if (i + 1)  % 10000 == 0 :
                     print('{} {}'.format(fname, i+1))                                      
                 data = f.strip().split('\t')
                 name = data[0].strip()
