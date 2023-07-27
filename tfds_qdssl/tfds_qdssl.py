@@ -36,8 +36,8 @@ class TFDS_QDSSL(tfds.core.GeneratorBasedBuilder):
         self.path = '/home/DIINF/vchang/jsaavedr/datasets/quickdraw'    
         return {
             'train': self._generate_examples(os.path.join(self.path,'train_ssl.txt')),
-            'test_known' : self._generate_examples(os.path.join(self.path,'test_ssl_known.txt')),
-            'test_unknown' : self._generate_examples(os.path.join(self.path,'test_ssl_unknown.txt'))
+            'test_known' : self._generate_examples(os.path.join(self.path,'test_known_ssl.txt')),
+            'test_unknown' : self._generate_examples(os.path.join(self.path,'test_unknown_ssl.txt'))
             }
     
     def _generate_examples(self, fname):
