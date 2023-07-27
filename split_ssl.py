@@ -24,15 +24,17 @@ if __name__ == '__main__' :
     keys = list(ds.keys())
     print(keys)
     random.shuffle(keys)
-    keys = keys[:n_cat]
-    keys_u = keys[-n_cat:]        
-    for cl in keys :        
+    keys_k = keys[:n_cat]
+    keys_u = keys[-n_cat:]
+        
+    for cl in keys_k :        
         random.shuffle(ds[cl])
         lst = ds[cl]                
         for item in lst[:1000]:            
             ftrain.write('{}\t{}\n'.format(item, cl))
         for item in lst[-1000:]:            
             ftest_k.write('{}\t{}\n'.format(item, cl))
+            
     for cl in keys_u:        
         random.shuffle(ds[cl])
         lst = ds[cl]                        
