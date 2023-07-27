@@ -37,7 +37,7 @@ if __name__ == '__main__' :
         random.shuffle(ds[cl])
         lst = ds[cl]                        
         for item in lst[-1000:]:            
-            ftest_u.write('{}t{}\tn'.format(item, cl))
+            ftest_u.write('{}\t{}\n'.format(item, cl))
     ftrain.close()
     ftest_k.close()
     ftest_u.close()
