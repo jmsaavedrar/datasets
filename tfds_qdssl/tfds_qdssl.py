@@ -13,7 +13,7 @@ class TFDS_QDSSL(tfds.core.GeneratorBasedBuilder):
         '1.0.0': 'Initial release.',
     }
     def get_categories(self):
-        with open('categories', 'r+') as fin:
+        with open('categories.txt', 'r+') as fin:
             categories =  [line.strip() for line in fin]
         return categories
     
