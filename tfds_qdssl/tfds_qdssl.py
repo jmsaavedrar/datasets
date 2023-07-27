@@ -12,18 +12,22 @@ class TFDS_QDSSL(tfds.core.GeneratorBasedBuilder):
     RELEASE_NOTES = {
         '1.0.0': 'Initial release.',
     }
-      
+    def get_categories(self):
+        with open('categories', 'r+') as fin:
+            categories =  [line.strip() for line in fin]
+        return categories
+    
     def _info(self) -> tfds.core.DatasetInfo:
         """Returns the dataset metadata."""    
 #        cats = range(345)
 #         with open('categories.txt') as f:
 #             for category in f:
 #                 cats.append(category.strip())
-                
+        categories = self.get_categories()                
         return self.dataset_info_from_configs(
             features=tfds.features.FeaturesDict({            
                 'image': tfds.features.Image(shape=(None, None, 1)),
-                'label': tfds.features.ClassLabel(names=range(345)),
+                'label': tfds.features.ClassLabel(names=categories),
             }),
             # If there's a common (input, target) tuple from the
             # features, specify them here. They'll be used if
@@ -43,17 +47,17 @@ class TFDS_QDSSL(tfds.core.GeneratorBasedBuilder):
     def _generate_examples(self, fname):
         """Yields examples."""
         # TODO(tdfs_mnist): Yields (key, example) tuples from the dataset
-        with open(fname) as flist :
-            for i , f in enumerate(flist):
-                print(i, f)            
-                data = f.strip().split('\t')
-                name = data[0].strip()
-                fimage = os.path.join(self.path, name)
-                label = int(data[1].strip())
-                image = io.imread(fimage)
-                image = np.expand_dims(image, -1)
-                yield name, {
-                    'image': image,
-                    'label': label,
-                }
+#         with open(fname) as flist :
+#             for i , f in enumerate(flist):
+#                 print(i, f)            
+#                 data = f.strip().split('\t')
+#                 name = data[0].strip()
+#                 fimage = os.path.join(self.path, name)
+#                 label = int(data[1].strip())
+#                 image = io.imread(fimage)
+#                 image = np.expand_dims(image, -1)
+#                 yield name, {
+#                     'image': image,
+#                     'label': label,
+#                 }
           
