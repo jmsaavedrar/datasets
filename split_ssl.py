@@ -21,7 +21,7 @@ if __name__ == '__main__' :
     ftest_k  = open(args.file+'_test_known.txt', 'w')
     ftest_u  = open(args.file+'_test_unknown.txt', 'w')
     
-    keys = ds.keys()
+    keys = list(ds.keys())
     print(keys)
     random.shuffle(keys)
     keys = keys[:n_cat]
