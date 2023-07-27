@@ -47,17 +47,17 @@ class TFDS_QDSSL(tfds.core.GeneratorBasedBuilder):
     def _generate_examples(self, fname):
         """Yields examples."""
         # TODO(tdfs_mnist): Yields (key, example) tuples from the dataset
-#         with open(fname) as flist :
-#             for i , f in enumerate(flist):
-#                 print(i, f)            
-#                 data = f.strip().split('\t')
-#                 name = data[0].strip()
-#                 fimage = os.path.join(self.path, name)
-#                 label = int(data[1].strip())
-#                 image = io.imread(fimage)
-#                 image = np.expand_dims(image, -1)
-#                 yield name, {
-#                     'image': image,
-#                     'label': label,
-#                 }
+        with open(fname) as flist :
+            for i , f in enumerate(flist[0]):
+                print(i, f)            
+                data = f.strip().split('\t')
+                name = data[0].strip()
+                fimage = os.path.join(self.path, name)
+                label = int(data[1].strip())
+                image = io.imread(fimage)
+                image = np.expand_dims(image, -1)
+                yield name, {
+                    'image': image,
+                    'label': label,
+                }
           
