@@ -50,9 +50,7 @@ class TFDS_QDSSL(tfds.core.GeneratorBasedBuilder):
         with open(fname) as flist :
             for i , f in enumerate(flist):       
                 if (i + 1)  % 100 == 0 :
-                    print('{}: {}'.format(i,f))
-                if i> 100:
-                    break                      
+                    print('{} {}'.format(fname, i+1))                                      
                 data = f.strip().split('\t')
                 name = data[0].strip()
                 fimage = os.path.join(self.path, name)
