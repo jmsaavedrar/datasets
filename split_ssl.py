@@ -30,14 +30,14 @@ if __name__ == '__main__' :
         random.shuffle(ds[cl])
         lst = ds[cl]                
         for item in lst[:1000]:            
-            ftrain.write('{}\n'.format(item))
+            ftrain.write('{}\t{}\n'.format(item, cl))
         for item in lst[-1000:]:            
-            ftest_k.write('{}\n'.format(item))
+            ftest_k.write('{}\t{}\n'.format(item, cl))
     for cl in keys_u:        
         random.shuffle(ds[cl])
         lst = ds[cl]                        
         for item in lst[-1000:]:            
-            ftest_u.write('{}\n'.format(item))
+            ftest_u.write('{}t{}\n'.format(item, cl))
     ftrain.close()
     ftest_k.close()
     ftest_u.close()
