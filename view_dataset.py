@@ -3,6 +3,7 @@ import tfds_qd.tfds_qd as tfds_qd
 import tensorflow as tf
 import matplotlib.pyplot as plt
 import numpy as np
+import argparse
 
 def view(ds, n_rows, n_cols) :    
     _, ax = plt.subplots(n_rows, n_cols)
@@ -27,8 +28,17 @@ def map_func(image):
     return image
 
 if __name__ == '__main__' :
-    dir ='~/tensorflow_datasets/'
-    ds = tfds.load('tfds_qd',data_dir = dir)
-    ds_test = ds['test'].map(map_func).shuffle(1024).batch(25)        
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-dataset', type = str, required = True)    
+    parser.add_argument('-data', type = str, required = True)      
+    parser.add_argument('-dir', type = str, required = False)
+    args = parser.parse_args()
+    dataset = args.dataset    
+    data = args.data
+    data_dir ='~/tensorflow_datasets/'
+    if not dir is None :
+        data_dir = args.dir    
+    ds = tfds.load(dataset, data_dir = data_dir)
+    ds_test = ds[data].map(map_func).shuffle(1024).batch(25)        
     #ds_test = ds_test.take(10)
     view(ds_test, 5, 5)
